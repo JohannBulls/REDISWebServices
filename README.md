@@ -122,13 +122,17 @@ git clone https://github.com/JohannBulls/REDISWebServices
 ```bash
 docker run --name some-redis -p 45000:6379 -d redis
 ```
-
+![alt text](images/image.png)
 #### 2. Build and Run Spring Boot Application
 ```bash
 cd REDISWebServices
 mvn spring-boot:run
 ```
-
+Now open a browser and go to the following link to login: Login page
+![alt text](images/image2.png)
+After logging in you access the board to start drawing Execution
+![alt text](images/image3.png)
+También puede abrir un navegador e ir al siguiente enlace para acceder al proyecto en AWS:
 The application will be accessible at:
 ```
 https://localhost:8444
