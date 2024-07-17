@@ -136,16 +136,18 @@ function BBCanvas() {
 
 function Editor({ name }) {
   return (
-    <div>
-      <h1>Hello, {name}</h1>
+    <div className="container mt-4">
       <hr />
-      <div id="toolstatus"></div>
+      <h1 className="text-center">Hello, {name}</h1>
       <hr />
-      <div id="container">
-        <BBCanvas />
+      <div className="row">
+        <div className="col">
+          <div id="container">
+            <BBCanvas />
+          </div>
+        </div>
       </div>
       <hr />
-      <div id="info"></div>
     </div>
   );
 }

@@ -25,9 +25,15 @@ public class DrawingServiceController {
    }
    @Autowired
    TicketRepository ticketRepo;
+
+   /**
+    * Handles GET requests to "/getticket" endpoint.
+    *
+    * @return A JSON string containing the current ticket number.
+    */
    @GetMapping("/getticket")
    public String getTicket() {
       return "{\"ticket\":\"" +
-            ticketRepo.getTicket() + "\"}";
+               ticketRepo.getTicket() + "\"}";
    }
 }

@@ -6,9 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-//import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
 @PropertySource("application.properties")
@@ -19,11 +17,14 @@ public class RedisConfig {
     @Value("${redis.bbcache.port}")
     private int redisPort;
 
+    /**
+     * Configures the Redis connection factory.
+     *
+     * @return LettuceConnectionFactory instance configured with Redis host and port.
+     */
     @Bean
     public LettuceConnectionFactory redisConnectionFactory() {
-        LettuceConnectionFactory connectionFactory = new LettuceConnectionFactory(
-                new RedisStandaloneConfiguration(redisHostName,
-                        redisPort));
-        return connectionFactory;
+        return new LettuceConnectionFactory(
+                new RedisStandaloneConfiguration(redisHostName, redisPort));
     }
 }

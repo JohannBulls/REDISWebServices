@@ -11,30 +11,47 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class TicketRepository {
+
     @Autowired
     private StringRedisTemplate template;
-    // inject the template as ListOperations
+
     @Resource(name = "stringRedisTemplate")
     private ListOperations<String, String> listTickets;
+
     private int ticketnumber;
 
+    /**
+     * Constructs a TicketRepository instance.
+     */
     public TicketRepository() {
     }
 
+    /**
+     * Retrieves the next ticket number and stores it in Redis.
+     *
+     * @return The next ticket number.
+     */
     public synchronized Integer getTicket() {
         Integer a = ticketnumber++;
         listTickets.leftPush("ticketStore", a.toString());
         return a;
     }
 
+    /**
+     * Checks if a ticket is valid and removes it from Redis.
+     *
+     * @param ticket Ticket to check.
+     * @return True if the ticket is valid; false otherwise.
+     */
     public boolean checkTicket(String ticket) {
         Long isValid = listTickets.getOperations().boundListOps("ticketStore").remove(0, ticket);
-        return (isValid > 0l);
+        return (isValid > 0L);
     }
 
     private void eviction() {
-        // Delete tickets after timout or include this functionality in checkticket
+        // Delete tickets after timeout or include this functionality in checkTicket
     }
 }
