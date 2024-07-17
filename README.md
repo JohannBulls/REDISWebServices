@@ -129,10 +129,16 @@ cd REDISWebServices
 mvn spring-boot:run
 ```
 Now open a browser and go to the following link to login: Login page
+
 ![alt text](images/image2.png)
+
 After logging in you access the board to start drawing Execution
+
 ![alt text](images/image3.png)
-También puede abrir un navegador e ir al siguiente enlace para acceder al proyecto en AWS:
+
+You can also open a browser and go to the following link to access the project on AWS:
+
+
 The application will be accessible at:
 ```
 https://localhost:8444
