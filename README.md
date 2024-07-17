@@ -1,5 +1,3 @@
-Here's an improved version of your README file in English, incorporating the details about running on `https://localhost:8444` and using Docker to run Redis:
-
 # Ticketing System with Spring Boot and Redis
 
 This project is a ticketing system application built with Spring Boot and Redis. It allows users to generate tickets and verify their validity using Redis as the data store.
