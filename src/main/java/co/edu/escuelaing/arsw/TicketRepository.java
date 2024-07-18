@@ -1,27 +1,25 @@
 package co.edu.escuelaing.arsw;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 public class TicketRepository {
 
-    @Autowired
-    private StringRedisTemplate template;
+    private static final Logger logger = Logger.getLogger(TicketRepository.class.getName());
 
-    @Resource(name = "stringRedisTemplate")
-    private ListOperations<String, String> listTickets;
+    @Autowired StringRedisTemplate template;
 
-    private int ticketnumber;
+    @Resource(name = "stringRedisTemplate") ListOperations<String, String> listTickets;
+
+    private int ticketnumber = 0;
 
     /**
      * Constructs a TicketRepository instance.
@@ -35,9 +33,15 @@ public class TicketRepository {
      * @return The next ticket number.
      */
     public synchronized Integer getTicket() {
-        Integer a = ticketnumber++;
-        listTickets.leftPush("ticketStore", a.toString());
-        return a;
+        try {
+            Integer ticket = ticketnumber++;
+            listTickets.leftPush("ticketStore", ticket.toString());
+            logger.log(Level.INFO, "Generated ticket number: " + ticket);
+            return ticket;
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error generating ticket", e);
+            return null;
+        }
     }
 
     /**
@@ -47,11 +51,23 @@ public class TicketRepository {
      * @return True if the ticket is valid; false otherwise.
      */
     public boolean checkTicket(String ticket) {
-        Long isValid = listTickets.getOperations().boundListOps("ticketStore").remove(0, ticket);
-        return (isValid > 0L);
+        try {
+            Long isValid = listTickets.getOperations().boundListOps("ticketStore").remove(0, ticket);
+            logger.log(Level.INFO, "Checked ticket: " + ticket + ", isValid: " + isValid);
+            return (isValid > 0L);
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error checking ticket", e);
+            return false;
+        }
     }
 
-    private void eviction() {
-        // Delete tickets after timeout or include this functionality in checkTicket
+    /**
+     * Evicts expired tickets from the store.
+     * This method can be scheduled to run periodically.
+     */
+    void eviction() {
+        // Implementation for ticket eviction if required
+        // For example, delete tickets after timeout or use in checkTicket method
+        logger.log(Level.INFO, "Eviction method called");
     }
 }
